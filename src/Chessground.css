@@ -1,15 +1,19 @@
 /**
- * This file is a concatenation of assets in https://github.com/ornicar/chessground/tree/master/assets.
+ * This file is a concatenation of assets in
+ * https://github.com/ornicar/chessground/tree/master/assets.
  *
- * But with a fixed width and height.
+ * The cg-wrap class has been modified with a width + padding hack
+ * hack allowing a responsive board size.
  */
 
 .cg-wrap {
-  width: 480px;
-  height: 480px;
-  box-sizing: content-box;
+  /* Ensure perfect square that matches width of outer container */
+  width: 100%;
+  padding-bottom: 100%;
+  box-sizing: border-box;
   position: relative;
   display: block;
+  overflow: hidden;
 }
 
 cg-helper {

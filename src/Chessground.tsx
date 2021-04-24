@@ -4,21 +4,17 @@ import "./Chessground.css"
 import { Api as ChessgroundApi } from "chessground/api"
 import { Config } from "chessground/config"
 import * as cg from "chessground/types"
-import CSS from "csstype"
 
-type ChessgroundProps = Omit<Config, "events"> &
-  Pick<CSS.Properties, "width" | "height"> & {
-    onChange?: () => void
-    onMove?: (orig: cg.Key, dest: cg.Key, capturedPiece?: cg.Piece) => void
-    onDropNewPiece?: (piece: cg.Piece, key: cg.Key) => void
-    onSelect?: (key: cg.Key) => void
-    onInsert?: (elements: cg.Elements) => void
-  }
+type ChessgroundProps = Omit<Config, "events"> & {
+  onChange?: () => void
+  onMove?: (orig: cg.Key, dest: cg.Key, capturedPiece?: cg.Piece) => void
+  onDropNewPiece?: (piece: cg.Piece, key: cg.Key) => void
+  onSelect?: (key: cg.Key) => void
+  onInsert?: (elements: cg.Elements) => void
+}
 
 const Chessground: React.FC<ChessgroundProps> = ({
   children,
-  width,
-  height,
   onChange,
   onMove,
   onDropNewPiece,
@@ -50,11 +46,7 @@ const Chessground: React.FC<ChessgroundProps> = ({
     }
   }, [initialized, chessgroundProps])
 
-  return (
-    <div ref={el} style={{ width: width, height: height }}>
-      {children}
-    </div>
-  )
+  return <div ref={el}>{children}</div>
 }
 
 export default Chessground
