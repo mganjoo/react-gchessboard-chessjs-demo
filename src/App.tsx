@@ -5,9 +5,12 @@ const App: React.FC = () => {
   const [whiteToPlay, setWhiteToPlay] = useState(true)
 
   return (
-    <div className="p-3 w-96">
-      <Chessground orientation={whiteToPlay ? "white" : "black"} />
-      <div className="flex flex-auto space-x-2">
+    <main className="max-w-xl mx-auto py-6 px-4">
+      <Chessground
+        orientation={whiteToPlay ? "white" : "black"}
+        premovable={{ enabled: false }}
+      />
+      <div className="flex flex-auto space-x-2 py-2">
         <button
           className="w-1/2 flex items-center justify-center rounded-md border border-gray-300"
           onClick={() => setWhiteToPlay(!whiteToPlay)}
@@ -18,7 +21,7 @@ const App: React.FC = () => {
           Reset
         </button>
       </div>
-    </div>
+    </main>
   )
 }
 
