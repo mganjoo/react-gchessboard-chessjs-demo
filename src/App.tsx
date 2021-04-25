@@ -50,6 +50,7 @@ const App: React.FC = () => {
         promotion: promotion,
       })
     }
+    setShapes(undefined)
     setFen(chess.fen())
     setLastMove(move)
     setPgn(chess.pgn())
@@ -79,8 +80,13 @@ const App: React.FC = () => {
 
   const reset = () => {
     chess.reset()
-    setShapes(undefined)
     updateBoard()
+  }
+
+  const undo = () => {
+    if (chess.undo()) {
+      updateBoard()
+    }
   }
 
   const gameStatus: () => string = () => {
@@ -119,7 +125,7 @@ const App: React.FC = () => {
         shapes={shapes}
         viewOnly={chess.game_over()}
       />
-      <div className="flex flex-auto space-x-2 py-2 justify-center">
+      <div className="py-2 space-y-2 sm:flex-auto sm:flex sm:flex-row sm:space-x-2 sm:space-y-0 sm:justify-center">
         <button
           className="c-button"
           onClick={() =>
@@ -129,7 +135,14 @@ const App: React.FC = () => {
           Flip
         </button>
         <button className="c-button" onClick={reset}>
-          Reset
+          Reset Board
+        </button>
+        <button
+          className="c-button"
+          onClick={undo}
+          disabled={!chess.history().length}
+        >
+          Undo Move
         </button>
       </div>
       {chess.game_over() && (
