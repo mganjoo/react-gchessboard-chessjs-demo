@@ -10,7 +10,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Demo app
 
-Demo app available at https://mganjoo.github.io/react-chessground-chessjs-demo/
+Demo app available at https://mganjoo.github.io/react-chessground-chessjs-demo/.
 
 ## Available Scripts
 
