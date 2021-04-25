@@ -8,6 +8,10 @@ A simple chess demo app that uses the [Chessground](https://github.com/ornicar/c
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Demo app
+
+Demo app available at https://mganjoo.github.io/react-chessground-chessjs-demo/
+
 ## Available Scripts
 
 In the project directory, you can run:
