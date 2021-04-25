@@ -37,6 +37,7 @@ const App: React.FC = () => {
   const [shapes, setShapes] = useState<DrawShape[]>()
   const [showPromotionDialog, setShowPromotionDialog] = useState(false)
   const [pendingMove, setPendingMove] = useState<[cg.Key, cg.Key]>()
+  const [pgn, setPgn] = useState<string>()
 
   const updateBoard = (
     move?: [cg.Key, cg.Key],
@@ -51,6 +52,7 @@ const App: React.FC = () => {
     }
     setFen(chess.fen())
     setLastMove(move)
+    setPgn(chess.pgn())
   }
 
   const handleMove: (orig: cg.Key, dest: cg.Key) => void = (orig, dest) => {
@@ -131,8 +133,11 @@ const App: React.FC = () => {
         </button>
       </div>
       {chess.game_over() && (
-        <div className="text-center py-2">{gameStatus()}</div>
+        <div className="text-center py-2 bg-gray-900 text-gray-100 mt-2 mb-4">
+          {gameStatus()}
+        </div>
       )}
+      <div>{pgn}</div>
       <div
         className={classNames("fixed z-10 inset-0 overflow-y-auto", {
           hidden: !showPromotionDialog,

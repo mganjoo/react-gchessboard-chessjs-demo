@@ -141,7 +141,7 @@ piece.fading {
   pointer-events: none;
   opacity: 0.8;
   font-family: sans-serif;
-  font-size: 30%;
+  font-size: 12px;
 }
 
 .cg-wrap coords.ranks {
