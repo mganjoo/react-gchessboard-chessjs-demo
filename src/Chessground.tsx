@@ -6,28 +6,26 @@ import { Config } from "chessground/config"
 
 const Chessground: React.FC<Config> = ({ children, ...chessgroundProps }) => {
   const el = useRef<HTMLDivElement>(null)
-  const ground = useRef<ChessgroundApi>()
-  const [initialized, setInitialized] = useState(false)
+  const [ground, setGround] = useState<ChessgroundApi>()
 
   // Initialize and destory on mount/unmount only
   useEffect(() => {
-    if (el.current) {
-      ground.current = NativeChessground(el.current, {})
-      setInitialized(true)
+    if (el.current && !ground) {
+      setGround(NativeChessground(el.current, {}))
     }
     return () => {
-      if (ground.current) {
-        ground.current.destroy()
+      if (ground) {
+        ground.destroy()
       }
     }
-  }, [])
+  }, [ground])
 
   // Update props after initialization is complete
   useEffect(() => {
-    if (initialized && ground.current) {
-      ground.current.set(chessgroundProps)
+    if (ground) {
+      ground.set(chessgroundProps)
     }
-  }, [initialized, chessgroundProps])
+  }, [ground, chessgroundProps])
 
   return <div ref={el}>{children}</div>
 }
