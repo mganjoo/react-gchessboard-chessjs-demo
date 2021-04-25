@@ -59,6 +59,7 @@ const App: React.FC = () => {
         orientation={orientation}
         turnColor={toColor(chess)}
         lastMove={lastMove}
+        check={chess.in_check()}
         movable={{
           free: false,
           color: toColor(chess),
@@ -66,8 +67,8 @@ const App: React.FC = () => {
           events: { after: handleMove },
         }}
         premovable={{ enabled: false }}
-        drawable={{ onChange: handleDraw }}
-        drawnShapes={shapes}
+        onDraw={handleDraw}
+        shapes={shapes}
       />
       <div className="flex flex-auto space-x-2 py-2">
         <button
