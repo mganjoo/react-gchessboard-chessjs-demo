@@ -3,25 +3,8 @@ import { Chessground as NativeChessground } from "chessground"
 import "./Chessground.css"
 import { Api as ChessgroundApi } from "chessground/api"
 import { Config } from "chessground/config"
-import * as cg from "chessground/types"
 
-type ChessgroundProps = Omit<Config, "events"> & {
-  onChange?: () => void
-  onMove?: (orig: cg.Key, dest: cg.Key, capturedPiece?: cg.Piece) => void
-  onDropNewPiece?: (piece: cg.Piece, key: cg.Key) => void
-  onSelect?: (key: cg.Key) => void
-  onInsert?: (elements: cg.Elements) => void
-}
-
-const Chessground: React.FC<ChessgroundProps> = ({
-  children,
-  onChange,
-  onMove,
-  onDropNewPiece,
-  onSelect,
-  onInsert,
-  ...chessgroundProps
-}) => {
+const Chessground: React.FC<Config> = ({ children, ...chessgroundProps }) => {
   const el = useRef<HTMLDivElement>(null)
   const ground = useRef<ChessgroundApi>()
   const [initialized, setInitialized] = useState(false)
