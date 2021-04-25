@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import Chessground from "./Chessground"
 import { ChessInstance, Square } from "chess.js"
 import * as cg from "chessground/types"
+import { DrawShape } from "chessground/draw"
 
 const ChessReq = require("chess.js")
 
@@ -28,6 +29,7 @@ const App: React.FC = () => {
   const [fen, setFen] = useState(chess.fen())
   const [orientation, setOrientation] = useState<cg.Color>("white")
   const [lastMove, setLastMove] = useState<cg.Key[]>()
+  const [shapes, setShapes] = useState<DrawShape[]>()
 
   const updateBoard = () => {
     setFen(chess.fen())
@@ -39,8 +41,13 @@ const App: React.FC = () => {
     setLastMove([orig, dest])
   }
 
+  const handleDraw: (newShapes: DrawShape[]) => void = (newShapes) => {
+    setShapes(newShapes)
+  }
+
   const reset = () => {
     chess.reset()
+    setShapes(undefined)
     updateBoard()
     setLastMove(undefined)
   }
@@ -59,6 +66,8 @@ const App: React.FC = () => {
           events: { after: handleMove },
         }}
         premovable={{ enabled: false }}
+        drawable={{ onChange: handleDraw }}
+        drawnShapes={shapes}
       />
       <div className="flex flex-auto space-x-2 py-2">
         <button

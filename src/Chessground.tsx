@@ -2,9 +2,18 @@ import React, { useEffect, useRef, useState } from "react"
 import { Chessground as NativeChessground } from "chessground"
 import "./Chessground.css"
 import { Api as ChessgroundApi } from "chessground/api"
+import { DrawShape } from "chessground/draw"
 import { Config } from "chessground/config"
 
-const Chessground: React.FC<Config> = ({ children, ...chessgroundProps }) => {
+type ChessgroundProps = Config & {
+  drawnShapes?: DrawShape[]
+}
+
+const Chessground: React.FC<ChessgroundProps> = ({
+  children,
+  drawnShapes,
+  ...chessgroundProps
+}) => {
   const el = useRef<HTMLDivElement>(null)
   const [ground, setGround] = useState<ChessgroundApi>()
 
@@ -24,8 +33,11 @@ const Chessground: React.FC<Config> = ({ children, ...chessgroundProps }) => {
   useEffect(() => {
     if (ground) {
       ground.set(chessgroundProps)
+      if (drawnShapes) {
+        ground.setShapes(drawnShapes)
+      }
     }
-  }, [ground, chessgroundProps])
+  }, [ground, chessgroundProps, drawnShapes])
 
   return <div ref={el}>{children}</div>
 }
