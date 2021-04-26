@@ -107,110 +107,121 @@ const App: React.FC = () => {
   }
 
   return (
-    <main className="max-w-xl mx-auto py-6 px-4">
-      <Chessground
-        fen={fen}
-        orientation={orientation}
-        turnColor={toColor(chess)}
-        lastMove={lastMove}
-        check={chess.in_check()}
-        movable={{
-          free: false,
-          color: toColor(chess),
-          dests: toDests(chess),
-          events: { after: handleMove },
-        }}
-        premovable={{ enabled: false }}
-        onDraw={handleDraw}
-        shapes={shapes}
-        viewOnly={chess.game_over()}
-      />
-      <div className="py-2 space-y-2 sm:flex-auto sm:flex sm:flex-row sm:space-x-2 sm:space-y-0 sm:justify-center">
-        <button
-          className="c-button"
-          onClick={() =>
-            setOrientation(orientation === "white" ? "black" : "white")
-          }
-        >
-          Flip
-        </button>
-        <button className="c-button" onClick={reset}>
-          Reset Board
-        </button>
-        <button
-          className="c-button"
-          onClick={undo}
-          disabled={!chess.history().length}
-        >
-          Undo Move
-        </button>
-      </div>
-      {chess.game_over() && (
-        <div className="text-center py-2 bg-gray-900 text-gray-100 mt-2 mb-4">
-          {gameStatus()}
+    <>
+      <main className="max-w-xl mx-auto py-6 px-4">
+        <Chessground
+          fen={fen}
+          orientation={orientation}
+          turnColor={toColor(chess)}
+          lastMove={lastMove}
+          check={chess.in_check()}
+          movable={{
+            free: false,
+            color: toColor(chess),
+            dests: toDests(chess),
+            events: { after: handleMove },
+          }}
+          premovable={{ enabled: false }}
+          onDraw={handleDraw}
+          shapes={shapes}
+          viewOnly={chess.game_over()}
+        />
+        <div className="py-2 space-y-2 sm:flex-auto sm:flex sm:flex-row sm:space-x-2 sm:space-y-0 sm:justify-center">
+          <button
+            className="c-button"
+            onClick={() =>
+              setOrientation(orientation === "white" ? "black" : "white")
+            }
+          >
+            Flip
+          </button>
+          <button className="c-button" onClick={reset}>
+            Reset Board
+          </button>
+          <button
+            className="c-button"
+            onClick={undo}
+            disabled={!chess.history().length}
+          >
+            Undo Move
+          </button>
         </div>
-      )}
-      <div>{pgn}</div>
-      <div
-        className={classNames("fixed z-10 inset-0 overflow-y-auto", {
-          hidden: !showPromotionDialog,
-        })}
-        aria-labelledby="modal-title"
-        role="dialog"
-        aria-modal="true"
-      >
-        <div className="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <div
-            className="fixed inset-0 bg-gray-500 bg-opacity-95 transition-opacity"
-            aria-hidden="true"
-          ></div>
-          <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden my-4 shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
-            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-center sm:justify-center mb-3">
-                <div className="mt-3 text-center sm:mt-0">
-                  <h3
-                    className="text-xl leading-6 font-medium text-gray-900"
-                    id="modal-title"
-                  >
-                    Promote piece
-                  </h3>
+        {chess.game_over() && (
+          <div className="text-center py-2 bg-gray-900 text-gray-100 mt-2 mb-4">
+            {gameStatus()}
+          </div>
+        )}
+        <div>{pgn}</div>
+        <div
+          className={classNames("fixed z-10 inset-0 overflow-y-auto", {
+            hidden: !showPromotionDialog,
+          })}
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-95 transition-opacity"
+              aria-hidden="true"
+            ></div>
+            <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden my-4 shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-center sm:justify-center mb-3">
+                  <div className="mt-3 text-center sm:mt-0">
+                    <h3
+                      className="text-xl leading-6 font-medium text-gray-900"
+                      id="modal-title"
+                    >
+                      Promote piece
+                    </h3>
+                  </div>
                 </div>
-              </div>
-              <div className="px-2 py-3 space-y-2 sm:flex sm:flex-row sm:space-x-2 sm:space-y-0 sm:justify-center">
-                <button
-                  type="button"
-                  className="c-button"
-                  onClick={() => handlePromotion("q")}
-                >
-                  Queen
-                </button>
-                <button
-                  type="button"
-                  className="c-button"
-                  onClick={() => handlePromotion("r")}
-                >
-                  Rook
-                </button>
-                <button
-                  type="button"
-                  className="c-button"
-                  onClick={() => handlePromotion("b")}
-                >
-                  Bishop
-                </button>
-                <button
-                  type="button"
-                  className="c-button"
-                  onClick={() => handlePromotion("n")}
-                >
-                  Knight
-                </button>
+                <div className="px-2 py-3 space-y-2 sm:flex sm:flex-row sm:space-x-2 sm:space-y-0 sm:justify-center">
+                  <button
+                    type="button"
+                    className="c-button"
+                    onClick={() => handlePromotion("q")}
+                  >
+                    Queen
+                  </button>
+                  <button
+                    type="button"
+                    className="c-button"
+                    onClick={() => handlePromotion("r")}
+                  >
+                    Rook
+                  </button>
+                  <button
+                    type="button"
+                    className="c-button"
+                    onClick={() => handlePromotion("b")}
+                  >
+                    Bishop
+                  </button>
+                  <button
+                    type="button"
+                    className="c-button"
+                    onClick={() => handlePromotion("n")}
+                  >
+                    Knight
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+      <footer className="mt-4 text-center w-full text-sm text-gray-700">
+        Built using{" "}
+        <a href="https://github.com/ornicar/chessground">Chessground</a> +{" "}
+        <a href="https://github.com/jhlywa/chess.js">chess.js</a>.{" "}
+        <a href="https://github.com/mganjoo/react-chessground-chessjs-demo">
+          View project on GitHub
+        </a>
+        .
+      </footer>
+    </>
   )
 }
 
