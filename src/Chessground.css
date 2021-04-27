@@ -1,13 +1,10 @@
 /**
  * This file is a concatenation of assets in
  * https://github.com/ornicar/chessground/tree/master/assets.
- *
- * The cg-wrap class has been modified with a width + padding hack
- * hack allowing a responsive board size.
  */
 
 .cg-wrap {
-  /* Ensure perfect square that matches width of outer container */
+  /* Width + padding ensures perfect square. */
   width: 100%;
   padding-bottom: 100%;
   box-sizing: border-box;
@@ -255,7 +252,6 @@ cg-board square.current-premove {
 }
 
 /** Embedded SVGs for all chess pieces */
-
 .cg-wrap piece.pawn.white {
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PHBhdGggZD0iTTIyLjUgOWMtMi4yMSAwLTQgMS43OS00IDQgMCAuODkuMjkgMS43MS43OCAyLjM4QzE3LjMzIDE2LjUgMTYgMTguNTkgMTYgMjFjMCAyLjAzLjk0IDMuODQgMi40MSA1LjAzLTMgMS4wNi03LjQxIDUuNTUtNy40MSAxMy40N2gyM2MwLTcuOTItNC40MS0xMi40MS03LjQxLTEzLjQ3IDEuNDctMS4xOSAyLjQxLTMgMi40MS01LjAzIDAtMi40MS0xLjMzLTQuNS0zLjI4LTUuNjIuNDktLjY3Ljc4LTEuNDkuNzgtMi4zOCAwLTIuMjEtMS43OS00LTQtNHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==");
 }
