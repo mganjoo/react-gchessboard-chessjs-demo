@@ -19,7 +19,7 @@ const Chessground: React.FC<ChessgroundProps> = ({
   const el = useRef<HTMLDivElement>(null)
   const [ground, setGround] = useState<ChessgroundApi>()
 
-  // Initialize and destory on mount/unmount only
+  // Initialize and destroy on mount/unmount only
   useEffect(() => {
     if (el.current && !ground) {
       setGround(NativeChessground(el.current, {}))
