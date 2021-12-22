@@ -165,7 +165,7 @@ const App: React.FC = () => {
               className="fixed inset-0 bg-gray-500 bg-opacity-95 transition-opacity"
               aria-hidden="true"
             ></div>
-            <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden my-4 shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+            <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden my-4 shadow-xl transition-all sm:my-8 sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-center sm:justify-center mb-3">
                   <div className="mt-3 text-center sm:mt-0">
