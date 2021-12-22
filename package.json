@@ -3,20 +3,36 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.12.0",
-    "@testing-library/react": "^11.2.6",
-    "@testing-library/user-event": "^12.8.3",
-    "chess.js": "^0.11.0",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "chess.js": "^0.12.0",
     "chessground": "^7.11.1",
     "classnames": "^2.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "web-vitals": "^1.1.1"
+    "web-vitals": "^2.1.2"
+  },
+  "devDependencies": {
+    "@types/chess.js": "^0.11.2",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^17.0.2",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "autoprefixer": "^10.4.0",
+    "gh-pages": "^3.2.3",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.3",
+    "postcss": "^8.4.5",
+    "prettier": "^2.5.1",
+    "react-scripts": "^5.0.0",
+    "tailwindcss": "^3.0.7",
+    "typescript": "^4.5.4"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
     "prepare": "husky install",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
@@ -38,24 +54,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@craco/craco": "^6.1.1",
-    "@tailwindcss/postcss7-compat": "^2.1.2",
-    "@types/chess.js": "^0.10.1",
-    "@types/jest": "^26.0.22",
-    "@types/node": "^14.14.41",
-    "@types/react": "^17.0.3",
-    "@types/react-dom": "^17.0.3",
-    "autoprefixer": "^9.8.6",
-    "gh-pages": "^3.1.0",
-    "husky": "^6.0.0",
-    "lint-staged": "^10.5.4",
-    "postcss": "^7.0.35",
-    "prettier": "^2.2.1",
-    "react-scripts": "^4.0.3",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
-    "typescript": "^4.2.4"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
