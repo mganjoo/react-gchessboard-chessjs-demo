@@ -1,7 +1,8 @@
-# React Chessground + Chess.js demo
+# React gchessboard + Chess.js demo
 
-A simple chess demo app that uses the [Chessground](https://github.com/ornicar/chessground) library for the UI and [chess.js](https://github.com/jhlywa/chess.js) for gameplay logic.
+A simple chess demo app that uses the [gchessboard](https://github.com/mganjoo/gchessboard) library for the UI and [chess.js](https://github.com/jhlywa/chess.js) for gameplay logic.
 
+- Uses [@lit-labs/react](https://www.npmjs.com/package/@lit-labs/react) to wrap the `<g-chess-board>` component.
 - Uses React hooks and functional components throughout.
 - Strongly typed using TypeScript.
 - Uses [Tailwind](https://tailwindcss.com/) for styling.
@@ -10,7 +11,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Demo app
 
-Demo app available at https://mganjoo.github.io/react-chessground-chessjs-demo/.
+Demo app available at https://mganjoo.github.io/react-gchessboard-chessjs-demo/.
 
 ## Available Scripts
 
