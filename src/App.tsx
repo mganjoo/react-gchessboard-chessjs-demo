@@ -1,105 +1,92 @@
-import "gchessboard"
 import React, { useState } from "react"
+import Chessground from "./Chessground"
 import { ChessInstance, PieceType, Square } from "chess.js"
+import * as cg from "chessground/types"
+import { DrawShape } from "chessground/draw"
 import classNames from "classnames"
-import { GChessBoard } from "./GChessBoard"
 
 const ChessReq = require("chess.js")
 
 type PromotablePiece = Exclude<PieceType, "p" | "k">
 
-function toColor(chess: ChessInstance): "white" | "black" {
+function toDests(chess: ChessInstance): Map<cg.Key, cg.Key[]> {
+  const dests = new Map()
+  if (!chess.game_over()) {
+    chess.SQUARES.forEach((square) => {
+      const moves = chess.moves({ square: square, verbose: true })
+      if (moves.length) {
+        dests.set(
+          square,
+          moves.map((move) => move.to)
+        )
+      }
+    })
+  }
+  return dests
+}
+
+function toColor(chess: ChessInstance): cg.Color {
   return chess.turn() === "w" ? "white" : "black"
 }
 
 const App: React.FC = () => {
   const [chess] = useState<ChessInstance>(new ChessReq())
   const [fen, setFen] = useState(chess.fen())
-  const [orientation, setOrientation] = useState<"white" | "black">("white")
+  const [orientation, setOrientation] = useState<cg.Color>("white")
+  const [lastMove, setLastMove] = useState<cg.Key[]>()
+  const [shapes, setShapes] = useState<DrawShape[]>()
   const [showPromotionDialog, setShowPromotionDialog] = useState(false)
-  const [pendingPromotion, setPendingPromotion] = useState<[Square, Square]>()
-
+  const [pendingMove, setPendingMove] = useState<[cg.Key, cg.Key]>()
   const [pgn, setPgn] = useState<string>()
 
-  const handleMoveStart = (e: Event) => {
-    const { from, setTargets } = (e as CustomEvent).detail
-    setTargets(chess.moves({ square: from, verbose: true }).map((m) => m.to))
+  const updateBoard = (
+    move?: [cg.Key, cg.Key],
+    promotion?: PromotablePiece
+  ) => {
+    if (move) {
+      chess.move({
+        from: move[0] as Square,
+        to: move[1] as Square,
+        promotion: promotion,
+      })
+    }
+    setShapes(undefined)
+    setFen(chess.fen())
+    setLastMove(move)
+    setPgn(chess.pgn())
   }
 
-  const handleMoveEnd = (e: Event) => {
-    const detail = (e as CustomEvent).detail
+  const handleMove: (orig: cg.Key, dest: cg.Key) => void = (orig, dest) => {
     const isPromotion = chess
       .moves({ verbose: true })
-      .some(
-        (move) => move.flags.indexOf("p") !== -1 && move.from === detail.from
-      )
+      .some((move) => move.flags.indexOf("p") !== -1 && move.from === orig)
 
     if (isPromotion) {
-      setPendingPromotion([detail.from, detail.to])
+      setPendingMove([orig, dest])
       setShowPromotionDialog(true)
-    }
-    const move = chess.move({
-      from: detail.from,
-      to: detail.to,
-      promotion: "q",
-    })
-    if (move === null) {
-      e.preventDefault()
+    } else {
+      updateBoard([orig, dest])
     }
   }
 
-  const handleMoveFinished = (e: Event) => {
-    setFen(chess.fen())
-    if (!pendingPromotion) {
-      setPgn(chess.pgn())
-    }
+  const handleDraw: (newShapes: DrawShape[]) => void = (newShapes) => {
+    setShapes(newShapes)
   }
 
   const handlePromotion: (piece: PromotablePiece) => void = (piece) => {
-    if (pendingPromotion) {
-      chess.undo()
-      chess.move({
-        from: pendingPromotion[0],
-        to: pendingPromotion[1],
-        promotion: piece,
-      })
-      setFen(chess.fen())
-      setPgn(chess.pgn())
-      setPendingPromotion(undefined)
-    }
+    updateBoard(pendingMove, piece)
     setShowPromotionDialog(false)
   }
 
   const reset = () => {
     chess.reset()
-    setFen(chess.fen())
-    setPgn(chess.pgn())
+    updateBoard()
   }
 
   const undo = () => {
     if (chess.undo()) {
-      setFen(chess.fen())
-      setPgn(chess.pgn())
+      updateBoard()
     }
-  }
-
-  const getKingSquareForSide = () => {
-    if (!chess.in_check()) {
-      return undefined
-    }
-
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        const label = String.fromCharCode("a".charCodeAt(0) + i).concat(
-          (j + 1).toString()
-        )
-        const piece = chess.get(label as Square)
-        if (piece?.type === "k" && piece.color === chess.turn()) {
-          return label as Square
-        }
-      }
-    }
-    return undefined
   }
 
   const gameStatus: () => string = () => {
@@ -121,18 +108,24 @@ const App: React.FC = () => {
 
   return (
     <>
-      <main className="max-w-xl px-4 py-6 mx-auto">
-        <GChessBoard
+      <main className="max-w-xl mx-auto py-6 px-4">
+        <Chessground
           fen={fen}
           orientation={orientation}
-          turn={toColor(chess)}
-          interactive={!chess.game_over()}
-          onmovestart={handleMoveStart}
-          onmoveend={handleMoveEnd}
-          onmovefinished={handleMoveFinished}
-        >
-          <div className="check-marker" slot={getKingSquareForSide()}></div>
-        </GChessBoard>
+          turnColor={toColor(chess)}
+          lastMove={lastMove}
+          check={chess.in_check()}
+          movable={{
+            free: false,
+            color: toColor(chess),
+            dests: toDests(chess),
+            events: { after: handleMove },
+          }}
+          premovable={{ enabled: false }}
+          onDraw={handleDraw}
+          shapes={shapes}
+          viewOnly={chess.game_over()}
+        />
         <div className="py-2 space-y-2 sm:flex-auto sm:flex sm:flex-row sm:space-x-2 sm:space-y-0 sm:justify-center">
           <button
             className="c-button"
@@ -154,7 +147,7 @@ const App: React.FC = () => {
           </button>
         </div>
         {chess.game_over() && (
-          <div className="py-2 mt-2 mb-4 text-center text-gray-100 bg-gray-900">
+          <div className="text-center py-2 bg-gray-900 text-gray-100 mt-2 mb-4">
             {gameStatus()}
           </div>
         )}
@@ -167,13 +160,17 @@ const App: React.FC = () => {
           role="dialog"
           aria-modal="true"
         >
-          <div className="flex items-start justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div className="inline-block my-4 overflow-hidden text-left align-middle transition-all bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-lg sm:w-full">
-              <div className="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
-                <div className="mb-3 sm:flex sm:items-center sm:justify-center">
+          <div className="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-95 transition-opacity"
+              aria-hidden="true"
+            ></div>
+            <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden my-4 shadow-xl transition-all sm:my-8 sm:max-w-lg sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-center sm:justify-center mb-3">
                   <div className="mt-3 text-center sm:mt-0">
                     <h3
-                      className="text-xl font-medium leading-6 text-gray-900"
+                      className="text-xl leading-6 font-medium text-gray-900"
                       id="modal-title"
                     >
                       Promote piece
@@ -215,9 +212,9 @@ const App: React.FC = () => {
           </div>
         </div>
       </main>
-      <footer className="w-full mt-4 text-sm text-center text-gray-700">
+      <footer className="mt-4 text-center w-full text-sm text-gray-700">
         Built using{" "}
-        <a href="https://github.com/mganjoo/gchessboard">gchessboard</a> +{" "}
+        <a href="https://github.com/ornicar/chessground">Chessground</a> +{" "}
         <a href="https://github.com/jhlywa/chess.js">chess.js</a>.{" "}
         <a href="https://github.com/mganjoo/react-chessground-chessjs-demo">
           View project on GitHub
