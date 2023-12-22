@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { ChessInstance, PieceType, Square } from "chess.js"
 import classNames from "classnames"
 import { GChessBoard } from "./GChessBoard"
+import { MoveEndEvent, MoveStartEvent } from "gchessboard"
 
 const ChessReq = require("chess.js")
 
@@ -20,26 +21,26 @@ const App: React.FC = () => {
 
   const [pgn, setPgn] = useState<string>()
 
-  const handleMoveStart = (e: Event) => {
-    const { from, setTargets } = (e as CustomEvent).detail
-    setTargets(chess.moves({ square: from, verbose: true }).map((m) => m.to))
+  const handleMoveStart = (e: CustomEvent<MoveStartEvent>) => {
+    e.detail.setTargets(
+      chess.moves({ square: e.detail.from, verbose: true }).map((m) => m.to)
+    )
   }
 
-  const handleMoveEnd = (e: Event) => {
-    const detail = (e as CustomEvent).detail
+  const handleMoveEnd = (e: CustomEvent<MoveEndEvent>) => {
     const isPromotion = chess
       .moves({ verbose: true })
       .some(
-        (move) => move.flags.indexOf("p") !== -1 && move.from === detail.from
+        (move) => move.flags.indexOf("p") !== -1 && move.from === e.detail.from
       )
 
     if (isPromotion) {
-      setPendingPromotion([detail.from, detail.to])
+      setPendingPromotion([e.detail.from, e.detail.to])
       setShowPromotionDialog(true)
     }
     const move = chess.move({
-      from: detail.from,
-      to: detail.to,
+      from: e.detail.from,
+      to: e.detail.to,
       promotion: "q",
     })
     if (move === null) {
@@ -47,7 +48,7 @@ const App: React.FC = () => {
     }
   }
 
-  const handleMoveFinished = (e: Event) => {
+  const handleMoveFinished = () => {
     setFen(chess.fen())
     if (!pendingPromotion) {
       setPgn(chess.pgn())
@@ -127,9 +128,9 @@ const App: React.FC = () => {
           turn={toColor(chess)}
           interactive={!chess.game_over()}
           coordinates={"outside"}
-          onmovestart={handleMoveStart}
-          onmoveend={handleMoveEnd}
-          onmovefinished={handleMoveFinished}
+          onMoveStart={handleMoveStart}
+          onMoveEnd={handleMoveEnd}
+          onMoveFinished={handleMoveFinished}
         >
           <div className="check-marker" slot={getKingSquareForSide()}></div>
         </GChessBoard>

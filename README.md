@@ -2,7 +2,7 @@
 
 A simple chess demo app that uses the [gchessboard](https://github.com/mganjoo/gchessboard) library for the UI and [chess.js](https://github.com/jhlywa/chess.js) for gameplay logic.
 
-- Uses [@lit-labs/react](https://www.npmjs.com/package/@lit-labs/react) to wrap the `<g-chess-board>` component.
+- Uses [@lit/react](https://www.npmjs.com/package/@lit/react) to wrap the `<g-chess-board>` component.
 - Uses React hooks and functional components throughout.
 - Strongly typed using TypeScript.
 - Uses [Tailwind](https://tailwindcss.com/) for styling.
